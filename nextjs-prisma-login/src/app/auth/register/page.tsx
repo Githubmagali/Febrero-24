@@ -1,37 +1,40 @@
-"use client" //todo va a ser procesado por el navegador
-import { useForm } from 'react-hook-form'
-
-
+"use client"
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 function RegisterPage() {
-    const { register, handleSubmit, formState: { errors }, } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const router = useRouter();
 
     const onSubmit = handleSubmit(async (data) => {
-
         if (data.password !== data.confirmPassword) {
             return alert("Password do not match");
         }
 
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    username: data.username,
+                    email: data.email,
+                    password: data.password,
+                }),
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            });
 
-        const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({
-                username: data.username,
-                email: data.email,
-                password: data.password,
-            }),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-        //const dataJSON = await res.json()
-        //console.log(dataJSON)
+            const dataJSON = await res.json();
+            console.log(dataJSON);
 
-        if (res.ok) {
-            window.location.href = '/'; 
+
+        
+            router.push("/auth/login");
+        } catch (error) {
+            console.error("Client error during registration:", error);
+           
         }
     });
-
     return (
         <div className="flex justify-center items-center h-screen">
             <form className="bg-white p-6 rounded shadow-md flex flex-col w-96"
@@ -83,7 +86,7 @@ function RegisterPage() {
                         >{errors.password.message}</div>
                     )
                 }
-                <input type="confirmPassword"
+                <input type="password"
                     placeholder='Repeat password'
                     className="mt-3 px-3 py-2 border rounded"
                     {...register("confirmPassword", {

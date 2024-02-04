@@ -1,32 +1,33 @@
 import { NextResponse } from 'next/server'
-import db from '@/libs/db'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+import db from '@/libs/db';
+
 
 export async function POST(request){
     try{
     const data = await request.json();
 
-    const emailFound = await db.user.findUnique({
+    const userFound = await db.user.findUnique({
         where :{
-            email: data.email
-        }
+            email: data.email,
+        },
     })
 
-    if(emailFound){
+    if(userFound){
         return NextResponse.json({
-            message: "Email al ready exist"
+            message: "Email already exist"
         },{
             status: 400
         })
     }
 
-    const userFound = await db.user.findUnique({
+    const userNameFound = await db.user.findUnique({
         where :{
             username: data.username
         }
     })
 
-    if(userFound){
+    if(userNameFound){
         return NextResponse.json({
             message: "Username al ready exist"
         },{
@@ -41,15 +42,16 @@ export async function POST(request){
         data:{
             username: data.username,
             email: data.email,
-            password: data.password
+            password: hashedPassword
         }
-    })
+    });
 
     //extrae todos los datos de newUser menos el password
-    const {password: _, ...user} = newUser
+    const {password: _, ...user} = newUser;
 
     return NextResponse.json(user);
 }catch(error){
+    console.error("Error during registration:", error);  
     return NextResponse.json({
         message: error.message
     },{
