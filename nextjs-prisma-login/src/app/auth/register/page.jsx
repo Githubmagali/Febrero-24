@@ -42,14 +42,14 @@ function RegisterPage() {
                 onSubmit={onSubmit}>
                 <h1 className='text-center font-bold hover:text-neutral-500'>Register</h1>
                 <input type="text"
-                    placeholder='Username'
-                    className="mt-3 px-3 py-2 border rounded"
                     {...(register("username", {
                         required: {
                             value: true,
                             message: 'Username is required'
                         }
-                    }))} />
+                    }))}
+                    placeholder='Username'
+                    className="mt-3 px-3 py-2 border rounded" />
                 {
                     errors.username && (
                         <div className='text-red-500 '
@@ -57,14 +57,14 @@ function RegisterPage() {
                     )
                 }
                 <input type="email"
-                    placeholder='Email'
-                    className="mt-3 px-3 py-2 border rounded"
                     {...(register("email", {
                         required: {
                             value: true,
                             message: 'Email is required'
                         }
-                    }))} />
+                    }))} 
+                    placeholder='Email'
+                    className="mt-3 px-3 py-2 border rounded"/>
                 {
                     errors.email && (
                         <div className='text-red-500 '
@@ -72,14 +72,14 @@ function RegisterPage() {
                     )
                 }
                 <input type="password"
-                    placeholder='Password'
-                    className="mt-3 px-3 py-2 border rounded"
                     {...(register("password", {
                         required: {
                             value: true,
                             message: 'Password is required'
                         }
-                    }))} />
+                    }))} 
+                    placeholder='Password'
+                    className="mt-3 px-3 py-2 border rounded"/>
                 {
                     errors.password && (
                         <div className='text-red-500'
@@ -87,14 +87,14 @@ function RegisterPage() {
                     )
                 }
                 <input type="password"
-                    placeholder='Repeat password'
-                    className="mt-3 px-3 py-2 border rounded"
                     {...register("confirmPassword", {
                         required: {
                             value: true,
                             message: 'Confirm password is required'
                         }
-                    })} />
+                    })}
+                    placeholder='Repeat password'
+                    className="mt-3 px-3 py-2 border rounded" />
                 {
                     errors.confirmPassword && (
                         <div className='text-red-500 '

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import db from '@/libs/db';
 
@@ -11,39 +11,39 @@ export async function POST(request){
         where :{
             email: data.email,
         },
-    })
+    });
 
     if(userFound){
         return NextResponse.json({
-            message: "Email already exist"
+            message: "Email already exist",
         },{
-            status: 400
-        })
+            status: 400,
+        });
     }
 
     const userNameFound = await db.user.findUnique({
         where :{
             username: data.username
         }
-    })
+    });
 
     if(userNameFound){
         return NextResponse.json({
-            message: "Username al ready exist"
+            message: "Username al ready exist",
         },{
             status: 400
-        })
+        });
     }
 
     
-    const hashedPassword = await bcrypt.hash(data.password, 10)
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const newUser = await db.user.create({
         data:{
             username: data.username,
             email: data.email,
-            password: hashedPassword
-        }
+            password: hashedPassword,
+        },
     });
 
     //extrae todos los datos de newUser menos el password
@@ -53,10 +53,10 @@ export async function POST(request){
 }catch(error){
     console.error("Error during registration:", error);  
     return NextResponse.json({
-        message: error.message
+        message: error.message,
     },{
         status: 500,
     }
-    )
+    );
 }
 }
