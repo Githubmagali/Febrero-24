@@ -34,7 +34,7 @@ const usernameFound = await db.user.findUnique({
    })
 }
 
-   console.log(data)
+
 
 
  const hashedPassword = await bcrypt.hash(data.password, 10)
