@@ -1,7 +1,10 @@
 function HomePage(){
 
   return(
-    <h1>Home page</h1>
+    <div className="flex justify-center items-center h-screen">
+      <h1>Home page</h1>
+    </div>
+    
   )
 }
 
