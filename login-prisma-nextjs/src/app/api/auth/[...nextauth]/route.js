@@ -5,7 +5,7 @@ import db from '@/libs/db'
 import bcrypt from 'bcrypt'
 
 // Configuración de opciones para la autenticación.
-const authOptions = {
+export const authOptions = {
   // Define la lista de proveedores que se utilizarán para la autenticación.
   providers: [
     // Configuración del proveedor de credenciales.
@@ -20,34 +20,37 @@ const authOptions = {
       },
 
       // Función de autorización que se ejecuta cuando se intenta autenticar al usuario.
-     async authorize(credentials, req) {
+      async authorize(credentials, req) {
         console.log(credentials);
 
-       const userFound = await db.user.findUnique({
-            where: {
-                email: credentials.email
-            }
+        const userFound = await db.user.findUnique({
+          where: {
+            email: credentials.email
+          }
         })
-       if(!userFound) return null
+        if (!userFound) throw new Error('No user found')
 
-       console.log(userFound)
+        console.log(userFound)
 
-      const matchPassword = await bcrypt.compare(credentials.password, userFound.password)
+        const matchPassword = await bcrypt.compare(credentials.password, userFound.password)
 
-    if (!matchPassword) return null
+        if (!matchPassword) throw new Error('Wrong password')
 
-    return {
-        id: userFound.id,
-        name: userFound.username,
-        email: userFound.email,
-    }
+        return {
+          id: userFound.id,
+          name: userFound.username,
+          email: userFound.email,
+        }
 
-      }
-    })
-  ]
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/auth/login",
+  }
 };
 
 // Inicia el servicio NextAuth con las opciones de autenticación configuradas.
 const handler = NextAuth(authOptions);
 
-export {handler as GET, handler as POST}
+export { handler as GET, handler as POST };

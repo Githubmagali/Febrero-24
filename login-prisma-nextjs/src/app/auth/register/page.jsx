@@ -34,7 +34,7 @@ function RegisterPage() {
           router.push('/auth/login')
         }
     });
-    console.log(errors);
+   
 
 
     return (
