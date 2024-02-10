@@ -33,7 +33,7 @@ function LoginPage() {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <form className="bg-white p-6 rounded shadow-md flex flex-col w-96"
+            <form className="bg-white p-6 rounded shadow-md flex flex-col"
                 onSubmit={onSubmit}
             >
                 {error && (
