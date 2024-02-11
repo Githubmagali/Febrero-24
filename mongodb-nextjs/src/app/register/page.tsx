@@ -44,8 +44,8 @@ function RegisterPage(){
             <form className="flex flex-col  w-96 " onSubmit={handleSubmit}>
 
                 {error && <div className='font-bold text-red-600 text-center'>{error}</div>}
-                
-            <h1 className="text-amber-500 hover:text-amber-600 font-bold mt-4 text-center">Register</h1>
+
+            <h1 className="text-amber-500 hover:text-amber-600 font-bold mt-4 text-center cursor-pointer">Register</h1>
                 <input type="text" placeholder="Fullname" name="fullname" className="mt-3 px-3 border rounded"/>
                 <input type="email" placeholder="Email" name="email"className="mt-3 px-3 border rounded"/>
                 <input type="password" placeholder="Password" name="password" className="mt-3 px-3 border rounded" />

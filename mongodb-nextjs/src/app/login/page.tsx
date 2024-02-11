@@ -36,7 +36,7 @@ function LoginPage(){
             
         {error && <div className='font-bold text-red-600 text-center'>{error}</div>}
 
-        <h1 className="text-amber-500 hover:text-amber-600 font-bold mt-4 text-center">Login</h1>
+        <h1 className="text-amber-500 hover:text-amber-600 font-bold mt-4 text-center cursor-pointer">Login</h1>
             <input type="email" placeholder="Email" name="email"className="mt-3 px-3 border rounded"/>
             <input type="password" placeholder="Password" name="password" className="mt-3 px-3 border rounded" />
             <button className="mt-3 bg-yellow-400 rounded hover:bg-yellow-500">Send</button>
