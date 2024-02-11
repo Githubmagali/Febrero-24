@@ -1,5 +1,8 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider  from "next-auth/providers/credentials";
+import { connectDB } from "@/libs/mongodb";
+import User from "@/models/user";
+import bcrypt from 'bcryptjs'
 
 
 const handler = NextAuth({
@@ -11,12 +14,20 @@ const handler = NextAuth({
                 password:{ label: "Password", type: "password"}
             },
             async authorize(credentials, req){
-                const user = {id: "1", fullname: '', email: 'mail@mail.com', password: 'password123'}
-                if(user){
-                    return user
-                }else{
-                    return null
-                }
+                await connectDB()
+                console.log(credentials)
+                
+                const userFound = await User.findOne({email: credentials?.email
+                }).select("+password")
+                if(!userFound) throw new Error("Invalid credentials")
+
+              const passwordM =  await bcrypt.compare(credentials!.password, userFound.password)
+
+              if (!passwordM) throw new Error("Invalid credentials")
+
+              console.log(userFound)
+
+              return userFound
               
             }
         })
@@ -27,9 +38,12 @@ const handler = NextAuth({
             return token
         },
         session({session, token}) {
-            console.log(session, token)
+            session.user = token.user as any;
             return session;
         }
+    },
+    pages:{
+        signIn: '/login'
     }
 
 })
