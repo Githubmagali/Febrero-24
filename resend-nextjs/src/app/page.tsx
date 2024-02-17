@@ -1,13 +1,42 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+
+const CustomAlert = ({message, onClose}) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onClose();
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [onClose]);
+
+  return (
+    <div className="fixed bottom-0 right-0 mb-4 mr-4 bg-green-500 text-white p-4 rounded-md">
+      {message}
+    </div>
+  );
+};
 
 
 function HomePage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
 
   const handleSendEmail = async () => {
+    setIsAlertVisible(true);
+
+    if (fullName === '' || email === '' || message === '') {
+      setAlertMessage("Complete todos los campos");
+
+      return;
+    }
+
+
+
     try {
       const res = await fetch('/api/send', {
         method: 'POST',
@@ -20,11 +49,28 @@ function HomePage() {
           message,
         }),
       });
-      const data = await res.json();
-      console.log(data);
-    } catch (error) {
-      console.error('Error sending email:', error);
+     
+    if (res.ok) {
+      setAlertMessage("Mensaje enviado con éxito");
+    } else {
+      setAlertMessage("Error al enviar el mensaje");
     }
+  } catch (error) {
+    console.error("Error sending email:", error);
+    setAlertMessage("Error al enviar el mensaje");
+  }
+
+
+    
+    setFullName("");
+    setEmail("");
+    setMessage("");
+
+    setTimeout(() => {
+      setIsAlertVisible(false);
+      setAlertMessage("");
+    }, 2000);
+
   };
 
   return (
@@ -48,7 +94,13 @@ function HomePage() {
             >
             Send email
           </button>
-
+          {isAlertVisible && (
+          <CustomAlert
+            message={alertMessage}
+            onClose={() => setIsAlertVisible(false)}
+          />
+        )}
+      
         </form>
       </section>
   )
